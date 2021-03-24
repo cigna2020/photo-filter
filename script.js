@@ -23,7 +23,7 @@ btnContainer.forEach(btn => btn.addEventListener('click', (e) => {
 }));
 
 inputsContainer.forEach(inputEl => {
-  inputEl.addEventListener('change', (e) => {
+  inputEl.addEventListener('input', (e) => {
     document.documentElement.style.setProperty(`--${e.target.name}`, `${e.target.value}` + `${e.target.dataset.sizing}`);
     console.log(`--${e.target.name}`, `${e.target.value}` + `${e.target.dataset.sizing}`)
     e.target.nextElementSibling.value = e.target.value
