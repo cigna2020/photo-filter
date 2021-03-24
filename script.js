@@ -23,7 +23,10 @@ const inputsContainer = document.querySelectorAll('.filters');
 inputsContainer.forEach(el => {
   inputsContainer.forEach(inputEl => {
     inputEl.addEventListener('change', (e) => {
-      document.documentElement.style.setProperty(`--${e.target.name}`, `${e.target.value}` + `${e.target.dataset.sizing}`)
+      document.documentElement.style.setProperty(`--${e.target.name}`, `${e.target.value}` + `${e.target.dataset.sizing}`);
+      e.target.nextElementSibling.value = e.target.value
+      // console.log(e.target.nextElementSibling.value)
+
     })
   })
 })
