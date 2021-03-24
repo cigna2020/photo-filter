@@ -18,8 +18,10 @@ const removeActiveClass = (btn) => {
 };
 
 btnContainer.forEach(btn => btn.addEventListener('click', (e) => {
-  removeActiveClass(btn);
-  addActiveClass(e);
+  if (e.target.nodeName === 'BUTTON') {
+    removeActiveClass(btn);
+    addActiveClass(e);
+  }
 }));
 
 inputsContainer.forEach(inputEl => {
