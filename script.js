@@ -6,6 +6,30 @@ const inputsContainer = document.querySelectorAll('.filters');
 
 const btnReset = document.querySelector('.btn-reset');
 const btnNext = document.querySelector('.btn-next');
+const btnLoad = document.querySelector('.btn-load');
+
+const picture = document.getElementById('image');
+const pictureSrc = 'https://raw.githubusercontent.com/rolling-scopes-school/stage1-tasks/assets/images/'
+const currentHour = new Date().getHours();
+const imagesNumbers = ['01.jpg', '02.jpg', '03.jpg', '05.jpg', '06.jpg', '07.jpg', '08.jpg', '09.jpg', '10.jpg', '11.jpg', '12.jpg', '13.jpg', '14.jpg', '15.jpg', '16.jpg', '17.jpg', '18.jpg', '19.jpg', '20.jpg'];
+let counter = 0;
+
+const getTimeOfDay = (hour = currentHour) => {
+  let timeOfDay = '';
+  if (hour >= 6 && hour < 12) {
+    timeOfDay = 'morning';
+  }
+  if (hour >= 12 && hour < 18) {
+    timeOfDay = 'day';
+  }
+  if (hour >= 18 && hour < 24) {
+    timeOfDay = 'evening';
+  }
+  if (hour >= 0 && hour < 6) {
+    timeOfDay = 'night';
+  }
+  return timeOfDay;
+}
 
 
 fullscreenButton.addEventListener('click', () => {
@@ -32,7 +56,7 @@ inputsContainer.forEach(inputEl => {
   })
 })
 
-btnReset.addEventListener('click', () => {
+const reset = () => {
   inputsContainer.forEach(el => {
     const inputs = el.querySelectorAll('input');
     inputs.forEach(input => {
@@ -41,38 +65,10 @@ btnReset.addEventListener('click', () => {
       input.value = input.dataset.value;
     });
   })
-});
-
-const picture = document.getElementById('image');
-const pictureSrc = 'https://raw.githubusercontent.com/rolling-scopes-school/stage1-tasks/assets/images/'
-const currentHour = new Date().getHours();
-const imagesNumbers = ['01.jpg', '02.jpg', '03.jpg', '05.jpg', '06.jpg', '07.jpg', '08.jpg', '09.jpg', '10.jpg', '11.jpg', '12.jpg', '13.jpg', '14.jpg', '15.jpg', '16.jpg', '17.jpg', '18.jpg', '19.jpg', '20.jpg'];
-let counter = 0;
-
-const getTimeOfDay = (hour = currentHour) => {
-  let timeOfDay = '';
-  if (hour >= 6 && hour < 12) {
-    timeOfDay = 'morning';
-  }
-  if (hour >= 12 && hour < 18) {
-    timeOfDay = 'day';
-  }
-  if (hour >= 18 && hour < 24) {
-    timeOfDay = 'evening';
-  }
-  if (hour >= 0 && hour < 6) {
-    timeOfDay = 'night';
-  }
-  return timeOfDay;
 }
 
-// const viewImage = (src) => {
-//   const img = new Image();
-//   img.src = src;
-//   img.onload = () => {
-//     body.style.backgroundImage = `url(${src})`;
-//   };
-// }
+btnReset.addEventListener('click', () => reset());
+
 
 const getImage = (e) => {
   const index = counter % imagesNumbers.length;
@@ -80,9 +76,15 @@ const getImage = (e) => {
   counter++;
 }
 
+btnNext.addEventListener('click', (e) => getImage(e));
 
-btnNext.addEventListener('click', (e) => {
+btnLoad.addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  const reader = new FileReader();
 
-  getImage(e)
-
-})
+  reader.onload = () => {
+    picture.src = reader.result;
+  }
+  reader.readAsDataURL(file);
+  reset();
+});
