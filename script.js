@@ -108,12 +108,24 @@ function drawImage() {
       const inputs = el.querySelectorAll('input');
       inputs.forEach(input => {
         let filter = ''
-        if (input.name === 'hue') {
+        if (input.name === 'blur') {
+          const coef = canvas.width * canvas.height;
+          let size = input.value;
+          coef > 431600 ? size = input.value * 2 : size = input.value / 1.6;
+          console.log(size)
+          filter = 'blur' + '(' + `${size}` + `${input.dataset.sizing}` + ')'
+          filetrList = filetrList + ' ' + filter;
+        }
+        else if (input.name === 'hue') {
           filter = 'hue-rotate' + '(' + `${input.value}` + `${input.dataset.sizing}` + ')'
-        } else {filter = `${input.name}` + '(' + `${input.value}` + `${input.dataset.sizing}` + ')'}
-        filetrList = filetrList + ' ' + filter;
+          filetrList = filetrList + ' ' + filter;
+        } else {
+          filter = `${input.name}` + '(' + `${input.value}` + `${input.dataset.sizing}` + ')'
+          filetrList = filetrList + ' ' + filter;
+        }
       });
     })
+    console.log(filetrList)
     ctx.filter = filetrList.toString();
 
     ctx.drawImage(img, 0, 0);
