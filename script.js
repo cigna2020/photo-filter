@@ -6,6 +6,7 @@ const inputsContainer = document.querySelectorAll('.filters');
 
 const btnReset = document.querySelector('.btn-reset');
 const btnNext = document.querySelector('.btn-next');
+const btnSave = document.querySelector('.btn-save');
 const btnLoad = document.getElementById('btnInput');
 
 const picture = document.getElementById('image');
@@ -89,4 +90,45 @@ btnLoad.addEventListener('change', (e) => {
   }
   reader.readAsDataURL(file);
   reset();
+});
+
+const canvas = document.querySelector('canvas');
+
+function drawImage() {
+  const img = new Image();
+  img.setAttribute('crossOrigin', 'anonymous');
+  img.src = picture.src;
+
+  img.onload = function () {
+    canvas.width = img.width;
+    canvas.height = img.height;
+    const ctx = canvas.getContext("2d");
+    let filetrList = '';
+    inputsContainer.forEach(el => {
+      const inputs = el.querySelectorAll('input');
+      inputs.forEach(input => {
+        let filter = ''
+        if (input.name === 'hue') {
+          filter = 'hue-rotate' + '(' + `${input.value}` + `${input.dataset.sizing}` + ')'
+        } else {filter = `${input.name}` + '(' + `${input.value}` + `${input.dataset.sizing}` + ')'}
+        filetrList = filetrList + ' ' + filter;
+      });
+    })
+    ctx.filter = filetrList.toString();
+
+    ctx.drawImage(img, 0, 0);
+  };
+}
+
+const loadImage = () => {
+  var link = document.createElement('a');
+  link.download = 'download.png';
+  link.href = canvas.toDataURL();
+  link.click();
+  link.delete;
+}
+
+btnSave.addEventListener('click', function (e) {
+  drawImage();
+  setTimeout(loadImage, 1000);
 });
