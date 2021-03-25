@@ -6,7 +6,7 @@ const inputsContainer = document.querySelectorAll('.filters');
 
 const btnReset = document.querySelector('.btn-reset');
 const btnNext = document.querySelector('.btn-next');
-const btnLoad = document.querySelector('.btn-load');
+const btnLoad = document.getElementById('btnInput');
 
 const picture = document.getElementById('image');
 const pictureSrc = 'https://raw.githubusercontent.com/rolling-scopes-school/stage1-tasks/assets/images/'
@@ -31,7 +31,6 @@ const getTimeOfDay = (hour = currentHour) => {
   return timeOfDay;
 }
 
-
 fullscreenButton.addEventListener('click', () => {
   !document.fullscreenElement ? document.documentElement.requestFullscreen() : document.exitFullscreen();
 });
@@ -47,7 +46,7 @@ btnContainer.forEach(btn => btn.addEventListener('click', (e) => {
     removeActiveClass(btn);
     addActiveClass(e);
   }
-}));
+}))
 
 inputsContainer.forEach(inputEl => {
   inputEl.addEventListener('input', (e) => {
@@ -63,12 +62,12 @@ const reset = () => {
       document.documentElement.style.setProperty(`--${input.name}`, `${input.dataset.value}` + `${input.dataset.sizing}`);
       input.nextElementSibling.value = input.dataset.value;
       input.value = input.dataset.value;
+      btnLoad.value = '';
     });
   })
 }
 
 btnReset.addEventListener('click', () => reset());
-
 
 const getImage = (e) => {
   const index = counter % imagesNumbers.length;
@@ -76,11 +75,14 @@ const getImage = (e) => {
   counter++;
 }
 
-btnNext.addEventListener('click', (e) => getImage(e));
+btnNext.addEventListener('click', (e) => {
+  getImage(e);
+  reset();
+});
 
 btnLoad.addEventListener('change', (e) => {
-  const file = e.target.files[0];
-  const reader = new FileReader();
+  let file = e.target.files[0];
+  let reader = new FileReader();
 
   reader.onload = () => {
     picture.src = reader.result;
